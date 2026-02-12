@@ -1,0 +1,159 @@
+{
+  "identity": "E1",
+  "project_name": "Driver Management System",
+  "tech_stack": {
+    "framework": "Node.js + Express",
+    "templating": "EJS",
+    "styling": "TailwindCSS",
+    "database": "PostgreSQL"
+  },
+  "design_philosophy": {
+    "theme": "Light",
+    "archetype": "Soft Utility",
+    "vibe": "Clean, Professional, Efficient, Trustworthy",
+    "principles": [
+      "Fusion over Imitation: Mix SaaS utility with consumer-grade polish.",
+      "Content is King: Data legibility is the priority.",
+      "Negative Space: Generous padding to reduce cognitive load.",
+      "Contrast: High contrast for text, subtle contrast for borders."
+    ]
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Outfit, sans-serif",
+      "weights": ["500", "600", "700"],
+      "usage": "Page titles, Card headers, Section labels"
+    },
+    "body": {
+      "font_family": "Inter, sans-serif",
+      "weights": ["400", "500"],
+      "usage": "Table data, Form labels, General text"
+    },
+    "cdn_links": [
+      "<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap' rel='stylesheet'>"
+    ]
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "#2563eb",
+      "foreground": "#ffffff",
+      "hover": "#1d4ed8"
+    },
+    "secondary": {
+      "DEFAULT": "#f1f5f9",
+      "foreground": "#0f172a",
+      "hover": "#e2e8f0"
+    },
+    "background": {
+      "app": "#f8fafc",
+      "card": "#ffffff",
+      "sidebar": "#ffffff"
+    },
+    "border": "#e2e8f0",
+    "text": {
+      "primary": "#0f172a",
+      "secondary": "#64748b",
+      "muted": "#94a3b8"
+    },
+    "status": {
+      "aktiv": {
+        "bg": "#dcfce7",
+        "text": "#166534",
+        "label": "Aktiv"
+      },
+      "inaktiv": {
+        "bg": "#ffe4e6",
+        "text": "#9f1239",
+        "label": "Inaktiv"
+      },
+      "neu": {
+        "bg": "#dbeafe",
+        "text": "#1e40af",
+        "label": "Neu"
+      }
+    }
+  },
+  "components": {
+    "button": {
+      "base": "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "variants": {
+        "default": "bg-blue-600 text-white hover:bg-blue-700",
+        "outline": "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900",
+        "ghost": "hover:bg-slate-100 hover:text-slate-900",
+        "destructive": "bg-red-500 text-white hover:bg-red-600"
+      },
+      "sizes": {
+        "default": "h-10 px-4 py-2",
+        "sm": "h-9 rounded-md px-3",
+        "lg": "h-11 rounded-md px-8",
+        "icon": "h-10 w-10"
+      }
+    },
+    "card": {
+      "container": "rounded-xl border border-slate-200 bg-white text-slate-950 shadow-sm",
+      "header": "flex flex-col space-y-1.5 p-6",
+      "title": "text-2xl font-semibold leading-none tracking-tight",
+      "content": "p-6 pt-0"
+    },
+    "input": {
+      "base": "flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    },
+    "badge": {
+      "base": "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+      "variants": {
+        "default": "border-transparent bg-blue-600 text-white hover:bg-blue-600/80",
+        "secondary": "border-transparent bg-slate-100 text-slate-900 hover:bg-slate-100/80",
+        "outline": "text-slate-950"
+      }
+    },
+    "table": {
+      "wrapper": "relative w-full overflow-auto",
+      "base": "w-full caption-bottom text-sm",
+      "header_row": "border-b transition-colors hover:bg-slate-100/50 data-[state=selected]:bg-slate-100",
+      "head_cell": "h-12 px-4 text-left align-middle font-medium text-slate-500 [&:has([role=checkbox])]:pr-0",
+      "body_row": "border-b transition-colors hover:bg-slate-100/50 data-[state=selected]:bg-slate-100",
+      "cell": "p-4 align-middle [&:has([role=checkbox])]:pr-0"
+    }
+  },
+  "layout_structure": {
+    "sidebar": {
+      "width": "w-64",
+      "mobile_behavior": "hidden md:flex flex-col fixed inset-y-0 z-50",
+      "style": "border-r border-slate-200 bg-white"
+    },
+    "header": {
+      "height": "h-16",
+      "style": "border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-40"
+    },
+    "main_content": {
+      "style": "flex-1 p-8 pt-6 bg-slate-50 min-h-screen"
+    }
+  },
+  "visual_assets": {
+    "login_background": {
+      "url": "https://images.unsplash.com/photo-1730314736953-f62ed0bc80e5?q=80&w=2000&auto=format&fit=crop",
+      "alt": "Vintage Map Texture",
+      "usage": "Split screen login page, right side cover image"
+    },
+    "icons": {
+      "library": "Lucide Icons",
+      "implementation": "Use <script src='https://unpkg.com/lucide@latest'></script> and <i data-lucide='icon-name'></i> tags. Initialize with lucide.createIcons() in your layout script."
+    }
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: This is a Node.js + Express + EJS project. DO NOT use React or JSX.",
+    "Use the provided Tailwind classes to replicate the 'Shadcn' aesthetic in plain HTML/EJS.",
+    "Implement a 'Layout' partial (header/sidebar) to avoid code duplication.",
+    "Use 'Outfit' font for all headings and 'Inter' for body text.",
+    "Ensure all interactive elements have 'data-testid' attributes.",
+    "For the Dashboard, use a Bento Grid layout (mix of col-span-1, col-span-2 cards).",
+    "Status Badges: Use the specific color combinations defined in 'colors.status'.",
+    "Mobile Responsiveness: Ensure the sidebar is collapsible (use a hamburger menu on mobile) and tables have horizontal scroll wrappers."
+  ],
+  "universal_guidelines": [
+    "Avoid generic 'Bootstrap' looks. Use generous padding (p-6, p-8) inside cards.",
+    "Do not use pure black (#000000). Use Slate-900 or Slate-950.",
+    "Add subtle transitions to all hover states (transition-all duration-200).",
+    "Use 'gap-6' or 'gap-8' for grid layouts to create breathing room."
+  ]
+}
