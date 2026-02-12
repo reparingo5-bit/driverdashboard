@@ -1,0 +1,120 @@
+<%- include('layout', { body: `
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Extra Sticker Liste</h1>
+      <p class="text-slate-500 mt-1">Verwaltung zusätzlicher Sticker</p>
+    </div>
+    ${user.role === 'admin' ? `
+      <button 
+        onclick="openStickerModal()"
+        data-testid="add-sticker-btn"
+        class="inline-flex items-center justify-center h-10 px-4 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all duration-200 gap-2"
+      >
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        Sticker hinzufügen
+      </button>
+    ` : ''}
+  </div>
+
+  <!-- Sticker Table -->
+  <div class="rounded-xl border border-slate-200 bg-white shadow-sm" data-testid="sticker-table-card">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-slate-200 bg-slate-50">
+            <th class="h-12 px-4 text-left align-middle text-sm font-medium text-slate-500">Kennzeichen</th>
+            <th class="h-12 px-4 text-left align-middle text-sm font-medium text-slate-500">Status</th>
+            <th class="h-12 px-4 text-left align-middle text-sm font-medium text-slate-500">Erstellt am</th>
+            ${user.role === 'admin' ? `
+              <th class="h-12 px-4 text-right align-middle text-sm font-medium text-slate-500">Aktionen</th>
+            ` : ''}
+          </tr>
+        </thead>
+        <tbody>
+          ${stickers.length === 0 ? `
+            <tr>
+              <td colspan="${user.role === 'admin' ? '4' : '3'}" class="p-8 text-center text-slate-500">
+                <i data-lucide="sticky-note" class="w-12 h-12 mx-auto mb-3 text-slate-300"></i>
+                <p>Keine Sticker gefunden</p>
+              </td>
+            </tr>
+          ` : stickers.map(sticker => `
+            <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors" data-testid="sticker-row-${sticker.id}">
+              <td class="p-4">
+                <span class="font-medium text-slate-900">${sticker.kennzeichen}</span>
+              </td>
+              <td class="p-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                  OK
+                </span>
+              </td>
+              <td class="p-4 text-sm text-slate-600">
+                ${new Date(sticker.created_at).toLocaleDateString('de-DE')}
+              </td>
+              ${user.role === 'admin' ? `
+                <td class="p-4 text-right">
+                  <form method="POST" action="/sticker/delete/${sticker.id}" onsubmit="return confirm('Sind Sie sicher?')">
+                    <button 
+                      type="submit"
+                      data-testid="delete-sticker-${sticker.id}"
+                      class="inline-flex items-center justify-center w-8 h-8 rounded-md hover:bg-red-50 transition-all duration-200"
+                    >
+                      <i data-lucide="trash-2" class="w-4 h-4 text-red-600"></i>
+                    </button>
+                  </form>
+                </td>
+              ` : ''}
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add Sticker Modal -->
+  <div id="stickerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50" onclick="closeStickerModal()"></div>
+    <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl" data-testid="sticker-modal">
+      <div class="p-6 border-b border-slate-200">
+        <h3 class="text-lg font-semibold text-slate-900">Sticker hinzufügen</h3>
+        <button onclick="closeStickerModal()" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5 text-slate-500"></i>
+        </button>
+      </div>
+      <form method="POST" action="/sticker/add">
+        <div class="p-6">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Kennzeichen *</label>
+          <input type="text" name="kennzeichen" required data-testid="sticker-kennzeichen-input"
+                 class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                 placeholder="z.B. B-AB 1234">
+        </div>
+        <div class="p-6 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="closeStickerModal()"
+                  class="h-10 px-4 rounded-md border border-slate-200 bg-white text-slate-900 text-sm font-medium hover:bg-slate-100 transition-all duration-200">
+            Abbrechen
+          </button>
+          <button type="submit" data-testid="sticker-submit-btn"
+                  class="h-10 px-4 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-all duration-200">
+            Hinzufügen
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openStickerModal() {
+      document.getElementById('stickerModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeStickerModal() {
+      document.getElementById('stickerModal').classList.add('hidden');
+    }
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeStickerModal();
+    });
+  </script>
+` }) %>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anmelden - Driver Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+  <div class="min-h-screen flex">
+    <!-- Left side - Login Form -->
+    <div class="flex-1 flex items-center justify-center p-8">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-slate-900">Driver Management</h1>
+          <p class="text-slate-500 mt-2">Melden Sie sich an, um fortzufahren</p>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-white shadow-sm p-8">
+          <% if (error) { %>
+            <div data-testid="login-error" class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+              <i data-lucide="alert-circle" class="w-4 h-4"></i>
+              <%= error %>
+            </div>
+          <% } %>
+
+          <form method="POST" action="/auth/login" data-testid="login-form">
+            <div class="space-y-4">
+              <div>
+                <label for="username" class="block text-sm font-medium text-slate-700 mb-2">Benutzername</label>
+                <input 
+                  type="text" 
+                  id="username" 
+                  name="username" 
+                  data-testid="username-input"
+                  required
+                  class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200"
+                  placeholder="Benutzername eingeben"
+                >
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Passwort</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  data-testid="password-input"
+                  required
+                  class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200"
+                  placeholder="Passwort eingeben"
+                >
+              </div>
+
+              <button 
+                type="submit" 
+                data-testid="login-submit-btn"
+                class="w-full h-10 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                <i data-lucide="log-in" class="w-4 h-4"></i>
+                Anmelden
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <p class="text-center text-sm text-slate-500 mt-6">
+          Fahrerverwaltungssystem © <%= new Date().getFullYear() %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Right side - Image -->
+    <div class="hidden lg:block lg:flex-1 relative">
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800">
+        <img 
+          src="https://images.unsplash.com/photo-1730314736953-f62ed0bc80e5?q=80&w=2000&auto=format&fit=crop" 
+          alt="Background" 
+          class="w-full h-full object-cover opacity-30"
+        >
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center p-12">
+        <div class="text-center text-white">
+          <h2 class="text-4xl font-bold mb-4">Willkommen zurück</h2>
+          <p class="text-lg text-blue-100 max-w-md">Verwalten Sie Ihre Fahrer, Sticker und Empfehlungen effizient an einem Ort.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
