@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anmelden - Driver Management</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <% if (locals.isProduction) { %>
+    <link href="/css/style.css" rel="stylesheet">
+  <% } else { %>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <% } %>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -46,6 +50,7 @@
                   name="username" 
                   data-testid="username-input"
                   required
+                  autocomplete="username"
                   class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200"
                   placeholder="Benutzername eingeben"
                 >
@@ -59,6 +64,7 @@
                   name="password" 
                   data-testid="password-input"
                   required
+                  autocomplete="current-password"
                   class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-all duration-200"
                   placeholder="Passwort eingeben"
                 >
