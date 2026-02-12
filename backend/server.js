@@ -13,7 +13,7 @@ const empfehlungenRoutes = require('./routes/empfehlungen');
 const { isAuthenticated } = require('./middleware/auth');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8001;
 
 // Middleware
 app.use(express.json());
