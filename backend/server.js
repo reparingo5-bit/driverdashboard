@@ -155,8 +155,9 @@ app.use((err, req, res, next) => {
 });
 
 // Start server (database init is manual via seed script)
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server running on port ${PORT} in ${isProduction ? 'production' : 'development'} mode`);
+const HOST = isProduction ? '127.0.0.1' : '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on ${HOST}:${PORT} in ${isProduction ? 'production' : 'development'} mode`);
 });
 
 // Graceful shutdown
