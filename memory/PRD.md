@@ -1,106 +1,76 @@
 # Driver Management System PRD
 
-## Original Problem Statement
-Build a production-ready Driver Management System with:
-- Node.js, Express, PostgreSQL (no JSON storage)
-- pg package for database
-- express-session for authentication
-- bcrypt for password hashing
-- EJS for templating
-- TailwindCSS for styling
-- Deployable on Render
+## Architecture
+```
+Internet → Nginx (HTTPS) → Node.js (PM2) → PostgreSQL (localhost)
+```
+
+**Deployment Target:** Hetzner CX23 VPS (Ubuntu 22.04)
+
+## Tech Stack
+- Node.js 20 + Express 4
+- PostgreSQL 15 (local installation)
+- EJS templating
+- TailwindCSS (built for production)
+- PM2 process manager
+- Nginx reverse proxy
+- Let's Encrypt SSL
 
 ## User Personas
-1. **Admin** - Full access to all features (CRUD operations, CSV export)
-2. **Partner** - Read-only access with ability to change driver status
+1. **Admin** - Full CRUD access, CSV export, user management
+2. **Partner** - Read-only with status change capability
 
-## Core Requirements (Static)
-- Role-based authentication (admin/partner)
-- Dashboard with stats cards (Total, Aktiv, Inaktiv, Neu)
-- Driver management (add, edit, delete, change status)
-- Extra Sticker list management
-- Empfehlungscode management
-- CSV export functionality
-- Session-based security with rate limiting
-- Mobile responsive design
+## Implemented Features (Feb 12, 2026)
 
-## What's Been Implemented (Feb 12, 2026)
-
-### Authentication System
-- [x] Login page with split-screen design
-- [x] Session-based authentication using express-session
-- [x] Rate limiting on login (5 attempts/15 min)
-- [x] Role-based middleware (isAuthenticated, isAdmin)
-- [x] Logout functionality
+### Authentication & Security
+- [x] Session-based auth with secure cookies
 - [x] bcrypt password hashing (12 rounds)
+- [x] Rate limiting on login (5/15min)
+- [x] Forced password change on first login
+- [x] Helmet security headers
+- [x] Compression middleware
+- [x] Morgan logging
 
 ### Dashboard
 - [x] Stats cards (Total, Aktiv, Inaktiv, Neu)
-- [x] Driver table with all columns
-- [x] Status dropdown with colored badges
-- [x] Add/Edit driver modals
-- [x] Delete driver confirmation
+- [x] Driver table with CRUD operations
+- [x] Status dropdown (all users)
 - [x] CSV export (admin only)
 
-### Extra Sticker Page
-- [x] Sticker table with Kennzeichen and Status (always "OK" green)
-- [x] Add sticker modal (admin only)
-- [x] Delete sticker (admin only)
+### Additional Pages
+- [x] Extra Sticker management
+- [x] Empfehlungscode management
+- [x] Password change page
 
-### Empfehlungscode Page
-- [x] Table with Vorname, Nachname, Abholort, Abgabeort, Datum
-- [x] Add empfehlung modal (admin only)
-- [x] Delete empfehlung (admin only)
+### Production Optimizations
+- [x] Built Tailwind CSS (not CDN)
+- [x] PM2 configuration
+- [x] Nginx reverse proxy config
+- [x] SSL via Let's Encrypt
 
-### Database Schema
-- [x] users table (UUID, username, password, role, created_at)
-- [x] drivers table (UUID, vorname, nachname, email, phone, status, fahrzeugtyp, kennzeichen, sticker, app, created_at)
-- [x] extra_sticker table (UUID, kennzeichen, created_at)
-- [x] empfehlungen table (UUID, vorname, nachname, abholort, abgabeort, created_at)
+## Database Schema
+- users (UUID, username, password, role, must_change_password)
+- drivers (UUID, vorname, nachname, email, phone, status, fahrzeugtyp, kennzeichen, sticker, app)
+- extra_sticker (UUID, kennzeichen)
+- empfehlungen (UUID, vorname, nachname, abholort, abgabeort)
 
-### Design/UI
-- [x] TailwindCSS styling with Outfit/Inter fonts
-- [x] Mobile responsive sidebar
-- [x] Soft SaaS admin aesthetic
-- [x] Status badge colors (green/red/blue)
-- [x] Lucide icons integration
+## Security Checklist
+- [x] No hardcoded credentials
+- [x] SESSION_SECRET required (32+ chars)
+- [x] DATABASE_URL from environment
+- [x] PostgreSQL localhost only
+- [x] Firewall (UFW) configuration
+- [x] HTTPS enforced
 
-## Default Credentials
-- Admin: `admin` / `Admin123!`
-- Partner: `partner` / `Partner123!`
-
-## Prioritized Backlog
-
-### P0 (Critical)
-- None remaining
-
-### P1 (High Priority)
-- [ ] Build Tailwind CSS for production (currently using CDN)
-- [ ] Add password change functionality
-- [ ] Add user management for admins
-
-### P2 (Medium Priority)
-- [ ] Driver search/filter functionality
-- [ ] Pagination for large datasets
-- [ ] Driver history/audit log
-- [ ] Bulk status updates
-
-### P3 (Nice to Have)
-- [ ] Dark mode toggle
-- [ ] Export to PDF
-- [ ] Email notifications
-- [ ] Dashboard charts/analytics
-
-## Environment Variables for Deployment
-```
-DATABASE_URL=postgresql://user:password@host:5432/dbname
-SESSION_SECRET=your-secret-key-min-32-characters
-NODE_ENV=production
-PORT=3000
-```
+## Deployment Files
+- DEPLOYMENT.md - Complete VPS setup guide
+- ecosystem.config.js - PM2 configuration
+- nginx.conf.example - Nginx template
+- schema.sql - Database schema
 
 ## Next Tasks
-1. Deploy to Render with Supabase PostgreSQL
-2. Configure environment variables
-3. Run seed script for initial admin user
-4. Test production deployment
+1. Deploy to Hetzner VPS
+2. Configure domain and DNS
+3. Set up SSL certificate
+4. Run database seed
+5. Configure monitoring (optional)

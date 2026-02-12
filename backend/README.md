@@ -1,129 +1,144 @@
 # Driver Management System
 
-A production-ready driver management system built with Node.js, Express, PostgreSQL, and EJS.
+Production-ready driver management system for Hetzner VPS deployment.
 
-## Features
+## Architecture
 
-- **Role-based Authentication**: Admin and Partner roles with different permissions
-- **Dashboard**: Overview of all drivers with statistics
-- **Driver Management**: Add, edit, delete, and change status of drivers (Admin)
-- **Status Changes**: Partners can change driver status
-- **Extra Sticker List**: Manage additional stickers
-- **Empfehlungscode**: Manage recommendations
-- **CSV Export**: Export driver data (Admin only)
-- **Mobile Responsive**: Works on all devices
+```
+Internet → Nginx (HTTPS) → Node.js (PM2) → PostgreSQL (localhost)
+```
 
 ## Tech Stack
 
-- Node.js + Express
-- PostgreSQL (no JSON storage)
-- EJS templating
-- TailwindCSS
-- bcrypt for password hashing
-- express-session for authentication
-- express-rate-limit for security
+- **Backend:** Node.js 20, Express 4
+- **Database:** PostgreSQL 15 (local)
+- **Templates:** EJS
+- **Styling:** TailwindCSS (built for production)
+- **Process Manager:** PM2
+- **Reverse Proxy:** Nginx
+- **SSL:** Let's Encrypt
 
-## Database Tables
+## Features
 
-1. **users** - User authentication
-2. **drivers** - Driver information
-3. **extra_sticker** - Extra sticker entries
-4. **empfehlungen** - Recommendations
+- Role-based authentication (admin/partner)
+- Dashboard with driver statistics
+- Driver management (CRUD)
+- Extra sticker list
+- Empfehlungscode management
+- CSV export
+- Mobile responsive
+- Forced password change on first login
 
-## Deployment on Render
+## Folder Structure
 
-### Prerequisites
-
-1. Create a PostgreSQL database (e.g., on Supabase)
-2. Create a Render account
-
-### Environment Variables
-
-Set these in Render dashboard:
-
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `SESSION_SECRET` | Random secret for sessions (min 32 chars) |
-| `NODE_ENV` | Set to `production` |
-| `PORT` | Render sets this automatically |
-
-### Deployment Steps
-
-1. Push code to GitHub
-2. Create new Web Service on Render
-3. Connect your GitHub repository
-4. Configure:
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-5. Add environment variables
-6. Deploy
-
-### Initialize Database
-
-After deployment, run the seed script to create the admin user:
-
-```bash
-npm run seed
+```
+driver-management/
+├── db/
+│   ├── database.js        # Database connection pool
+│   └── seed.js            # Database initialization script
+├── middleware/
+│   └── auth.js            # Authentication middleware
+├── public/
+│   └── css/
+│       └── style.css      # Built Tailwind CSS (production)
+├── routes/
+│   ├── auth.js            # Login/logout/password change
+│   ├── dashboard.js       # Dashboard & CSV export
+│   ├── drivers.js         # Driver CRUD
+│   ├── empfehlungen.js    # Empfehlungen CRUD
+│   └── sticker.js         # Extra sticker CRUD
+├── src/
+│   └── input.css          # Tailwind source CSS
+├── views/
+│   ├── change-password.ejs
+│   ├── dashboard.ejs
+│   ├── empfehlungen.ejs
+│   ├── error.ejs
+│   ├── layout.ejs
+│   ├── login.ejs
+│   └── sticker.ejs
+├── .env                   # Environment variables (DO NOT COMMIT)
+├── .env.example           # Environment template
+├── DEPLOYMENT.md          # Full VPS deployment guide
+├── ecosystem.config.js    # PM2 configuration
+├── nginx.conf.example     # Nginx configuration template
+├── package.json
+├── schema.sql             # PostgreSQL schema
+├── server.js              # Main application entry
+└── tailwind.config.js     # Tailwind configuration
 ```
 
-Or run SQL schema manually in your PostgreSQL client.
+## Quick Start (Development)
 
-## Default Admin Credentials
+```bash
+# Install dependencies
+yarn install
 
-- **Username**: admin
-- **Password**: Admin123!
+# Create .env from template
+cp .env.example .env
+# Edit .env with your database credentials
 
-⚠️ **Change the password after first login in production!**
+# Initialize database
+node db/seed.js
 
-## Local Development
+# Start development server
+yarn dev
+```
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create `.env` file:
-   ```
-   DATABASE_URL=postgresql://user:password@localhost:5432/driver_management
-   SESSION_SECRET=your-secret-key-min-32-characters-long
-   NODE_ENV=development
-   PORT=3000
-   ```
-4. Run migrations/seed:
-   ```bash
-   npm run seed
-   ```
-5. Start development server:
-   ```bash
-   npm run dev
-   ```
+## Production Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete Hetzner VPS deployment guide.
+
+### Quick Reference
+
+```bash
+# Build CSS for production
+yarn build:css
+
+# Start with PM2
+pm2 start ecosystem.config.js
+
+# View logs
+pm2 logs driver-management
+```
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `SESSION_SECRET` | Yes | Min 32 character secret |
+| `NODE_ENV` | Yes | `production` or `development` |
+| `PORT` | No | Default: 3000 |
 
 ## Security Features
 
-- Password hashing with bcrypt (12 rounds)
-- Session-based authentication
-- Rate limiting on login (5 attempts per 15 minutes)
-- HTTP-only cookies
-- Role-based access control enforced on backend
-- No credentials logged to console
-- Environment variables for all secrets
+- bcrypt password hashing (12 rounds)
+- Session-based auth with secure cookies
+- Rate limiting on login (5 attempts/15 min)
+- Forced password change on first login
+- Helmet security headers
+- HTTPS enforced via Nginx
+- PostgreSQL localhost only
 
 ## API Routes
 
-| Route | Method | Description | Access |
-|-------|--------|-------------|--------|
-| `/auth/login` | GET/POST | Login page | Public |
-| `/auth/logout` | GET | Logout | Authenticated |
-| `/dashboard` | GET | Dashboard with stats | Authenticated |
-| `/dashboard/export` | GET | CSV export | Admin |
-| `/drivers/add` | POST | Add driver | Admin |
-| `/drivers/update/:id` | POST | Update driver | Admin |
-| `/drivers/status/:id` | POST | Change status | Authenticated |
-| `/drivers/delete/:id` | POST | Delete driver | Admin |
-| `/sticker` | GET | Sticker list | Authenticated |
-| `/sticker/add` | POST | Add sticker | Admin |
-| `/sticker/delete/:id` | POST | Delete sticker | Admin |
-| `/empfehlungen` | GET | Empfehlungen list | Authenticated |
-| `/empfehlungen/add` | POST | Add empfehlung | Admin |
-| `/empfehlungen/delete/:id` | POST | Delete empfehlung | Admin |
+| Route | Method | Access | Description |
+|-------|--------|--------|-------------|
+| `/auth/login` | GET/POST | Public | Login page |
+| `/auth/logout` | GET | Auth | Logout |
+| `/auth/change-password` | GET/POST | Auth | Change password |
+| `/dashboard` | GET | Auth | Dashboard |
+| `/dashboard/export` | GET | Admin | CSV export |
+| `/drivers/add` | POST | Admin | Add driver |
+| `/drivers/update/:id` | POST | Admin | Update driver |
+| `/drivers/status/:id` | POST | Auth | Change status |
+| `/drivers/delete/:id` | POST | Admin | Delete driver |
+| `/sticker` | GET | Auth | Sticker list |
+| `/sticker/add` | POST | Admin | Add sticker |
+| `/empfehlungen` | GET | Auth | Empfehlungen list |
+| `/empfehlungen/add` | POST | Admin | Add empfehlung |
+
+## License
+
+Private - All rights reserved
